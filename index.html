@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>創意媒體與生活｜Padlet 上課操作</title>
+  <style>
+    :root{
+      --padlet:#ffd000;
+      --padlet-dark:#c89700;
+      --ink:#191919;
+      --paper:#fff;
+      --soft:#fff6c9;
+      --teal:#00a99d;
+      --shadow:0 18px 45px rgba(74,55,0,.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      background:
+        radial-gradient(circle at 20px 20px,rgba(255,255,255,.17) 0 6px,transparent 7px) 0 0/42px 42px,
+        var(--padlet);
+      min-height:100vh;
+    }
+    button,a{font:inherit}
+    .app{min-height:100vh;display:grid;grid-template-rows:auto 1fr auto}
+    header{
+      position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;
+      padding:16px clamp(18px,4vw,48px);background:rgba(255,208,0,.93);backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(0,0,0,.09)
+    }
+    .brand{width:46px;height:46px;border-radius:15px;background:#fff;display:grid;place-items:center;font-size:25px;box-shadow:0 7px 20px rgba(0,0,0,.12)}
+    .headtext{min-width:0;flex:1}
+    .headtext b{display:block;font-size:clamp(18px,3vw,25px)}
+    .headtext span{font-size:13px;opacity:.68}
+    .step-count{font-weight:900;background:#111;color:#fff;border-radius:999px;padding:8px 13px;white-space:nowrap}
+    main{width:min(1120px,100%);margin:auto;padding:clamp(18px,4vw,42px)}
+    .progress{height:10px;background:rgba(255,255,255,.52);border-radius:999px;overflow:hidden;margin-bottom:20px}
+    .progress>i{display:block;width:14.286%;height:100%;background:#111;border-radius:inherit;transition:width .35s ease}
+    .stage{display:grid;grid-template-columns:minmax(260px,.82fr) minmax(360px,1.18fr);gap:clamp(18px,4vw,42px);align-items:start}
+    .phone-wrap{position:relative;display:flex;justify-content:flex-end}
+    .phone-wrap:after{content:"➜";position:absolute;z-index:6;right:-48px;top:42%;font-size:48px;line-height:1;color:#d92130;text-shadow:2px 2px 0 #fff,-2px -2px 0 #fff;pointer-events:none}
+    .phone{
+      max-width:390px;width:100%;justify-self:center;background:var(--padlet);border:10px solid #111;border-radius:38px;
+      box-shadow:var(--shadow);padding:18px 16px 24px;min-height:610px;position:relative;overflow:hidden
+    }
+    .phone:before{content:"";position:absolute;top:8px;left:50%;width:86px;height:22px;transform:translateX(-50%);background:#111;border-radius:0 0 15px 15px}
+    .status{display:flex;justify-content:space-between;font-weight:900;font-size:13px;margin:13px 2px 24px}
+    .board-title{font-size:18px;font-weight:900;margin-bottom:15px}
+    .section-title{font-size:23px;line-height:1.25;font-weight:900;margin-bottom:14px}
+    .card{background:#fff;border-radius:19px;padding:18px;margin:12px 0;box-shadow:0 8px 18px rgba(84,57,0,.11);transition:.25s}
+    .card.focus{transform:scale(1.018)}
+    .red-circle{position:absolute;z-index:4;pointer-events:none;border:5px solid #ed2532;border-radius:50%;box-shadow:0 0 0 3px #fff,0 5px 18px rgba(90,0,0,.3);transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease}
+    .phone-speech{position:absolute;z-index:5;left:17px;right:17px;bottom:105px;pointer-events:none;background:#fff;border:3px solid #111;border-radius:22px;padding:12px 16px;box-shadow:6px 7px 0 rgba(0,0,0,.16);font-weight:900;line-height:1.5}
+    .phone-speech:after{content:"";position:absolute;right:36px;bottom:-13px;width:19px;height:19px;background:#fff;border-right:3px solid #111;border-bottom:3px solid #111;transform:rotate(45deg)}
+    .phone-speech.pop{animation:speech-pop .3s ease-out}
+    @keyframes speech-pop{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .card h3{margin:0 0 9px;font-size:20px}.card p{margin:6px 0;line-height:1.65;font-size:15px}
+    .small{font-size:12px;opacity:.67}
+    .plus{height:58px;border-radius:16px;background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:34px;margin-bottom:12px}
+    .comment{border-top:1px solid #ddd;margin-top:12px;padding-top:12px;color:#767676}
+    .bottom{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:11px;background:linear-gradient(transparent,var(--padlet) 35%)}
+    .fab{width:62px;height:62px;border-radius:50%;border:0;color:#fff;background:var(--teal);font-size:38px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+    .instruction{background:rgba(255,255,255,.96);border-radius:30px;padding:clamp(20px,3vw,34px);box-shadow:var(--shadow);height:min(720px,calc(100dvh - 205px));min-height:400px;display:flex;flex-direction:column;overflow:hidden}
+    .instruction-scroll{min-height:0;flex:1;overflow-y:auto;padding:3px 8px 12px 3px;scrollbar-gutter:stable}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:900;color:#755b00;margin-bottom:10px}
+    .number{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#111;color:#fff}
+    h1{font-size:clamp(30px,5vw,54px);line-height:1.08;margin:8px 0 13px;letter-spacing:-.04em}
+    .lead{font-size:clamp(17px,2.2vw,21px);line-height:1.75;margin:0 0 18px}
+    .bubble{position:relative;background:var(--soft);border:2px solid #111;border-radius:18px;padding:16px 18px;margin:5px 0 18px;line-height:1.65;font-weight:700}
+    .bubble:before{content:"";position:absolute;left:24px;bottom:-11px;width:18px;height:18px;background:var(--soft);border-right:2px solid #111;border-bottom:2px solid #111;transform:rotate(45deg)}
+    .example{background:#e8f9f6;border:2px solid #008d83;border-radius:18px;padding:15px 18px;margin:0 0 18px}
+    .example b{display:block;color:#00685f;margin-bottom:7px}.example p{white-space:pre-line;line-height:1.7;margin:0}
+    .sample-tag{display:inline-block;background:#e5f8f4;color:#00766d;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:900;margin-bottom:9px}
+    .sample-image{display:none;background:#f1ebdb;border-radius:12px;padding:10px;margin-top:10px;text-align:center;font-size:13px}
+    .board-link{display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;min-height:48px;margin:4px 0 17px;padding:10px 20px;border:2px solid #111;border-radius:999px;background:var(--teal);color:#fff;font-weight:900;text-decoration:none;box-shadow:0 7px 0 #111;transition:transform .15s,box-shadow .15s}
+    .board-link:hover,.board-link:focus{transform:translateY(3px);box-shadow:0 4px 0 #111}
+    .tips{margin:0;padding-left:1.25em;line-height:1.8}.tips li+li{margin-top:6px}
+    .warning{margin-top:14px;border-left:6px solid #ed5c43;padding:10px 14px;background:#fff1ed;border-radius:8px;line-height:1.6}
+    .actions{flex:none;display:flex;gap:12px;padding-top:16px;border-top:1px solid #ddd;background:#fff}
+    .actions button{min-height:50px;border-radius:999px;border:2px solid #111;padding:10px 20px;font-weight:900;cursor:pointer}
+    .prev{background:#fff}.next{background:#111;color:#fff;margin-left:auto}.next:hover,.next:focus{background:var(--teal);border-color:var(--teal)}
+    .dots{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 0 16px}.dot{min-height:38px;border-radius:999px;border:2px solid #111;background:#fff;padding:6px 13px;font-size:14px;font-weight:900;cursor:pointer}.dot.on{background:#111;color:#fff}
+    .checklist label{display:flex;gap:10px;align-items:flex-start;padding:11px;border-bottom:1px solid #ddd;line-height:1.5}.checklist input{width:22px;height:22px;accent-color:var(--teal)}
+    .done{display:none;margin-top:10px;background:#e6fff7;border:2px solid #008a7f;border-radius:16px;padding:15px;font-weight:900;text-align:center}
+    .room-card{display:none;background:#fff;border-radius:19px;padding:22px 16px;margin:14px 0;text-align:center;box-shadow:0 8px 18px rgba(84,57,0,.11)}
+    .room-people{font-size:54px;line-height:1.3}.room-card h3{margin:8px 0}.room-card p{line-height:1.6;margin:5px 0}
+    .phone.in-room .plus,.phone.in-room .card,.phone.in-room .bottom{display:none}
+    .phone.in-room .room-card{display:block}
+    @media(max-width:760px){
+      header{padding:12px 14px}.brand{width:40px;height:40px}.headtext span{display:none}.step-count{font-size:12px}
+      main{padding:14px}.stage{grid-template-columns:1fr;gap:54px}.phone-wrap{justify-content:center}.phone-wrap:after{content:"⬇";right:calc(50% - 21px);top:-49px;font-size:42px}.instruction{order:-1;height:auto;min-height:0;overflow:visible;border-radius:24px;padding:24px 20px}.instruction-scroll{overflow:visible;padding:0}.phone{min-height:520px;border-width:7px;border-radius:30px}.actions{position:sticky;bottom:0;background:linear-gradient(transparent,#fff 24%);padding-top:32px;border:0}.actions button{flex:1}.next{margin-left:0}h1{font-size:34px}.lead{font-size:17px}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">🧳</div>
+    <div class="headtext"><b>創意媒體與生活｜Padlet 上課操作</b><span>一次只做一個動作，完成後再按下一步</span></div>
+    <div class="step-count" id="stepCount">步驟 1／7</div>
+  </header>
+
+  <main>
+    <div class="progress"><i id="bar"></i></div>
+    <nav class="dots" id="dots" aria-label="選擇操作步驟"></nav>
+    <section class="stage">
+      <div class="phone-wrap">
+      <div class="phone" id="phone" aria-label="Padlet 手機介面示意；紅圈標示目前步驟的位置">
+        <div class="status"><span>14:47</span><span>●●● 4G　80%</span></div>
+        <div class="board-title">創意媒體與生活｜第一階段</div>
+        <div class="section-title" id="weekTitle">第1週｜我的大學行李箱</div>
+        <div class="plus" id="plusTarget">＋</div>
+        <article class="card" id="taskCard"><h3>本週任務</h3><p>興趣或能力、期待、小擔心，再放入一張代表自己的圖片。</p></article>
+        <article class="card" id="studentCard"><span class="sample-tag">貼文示範</span><h3 id="postTitle">01｜王小明｜我的大學行李箱</h3><p id="postContent">我喜歡拍照，希望認識新朋友，也有點擔心上台報告。</p><div class="sample-image" id="sampleImage">📷 示範圖片：相機或自己拍的照片</div><div class="comment" id="commentTarget">⊕ 新增留言</div></article>
+        <article class="room-card" id="roomCard"><div class="room-people">🧑🏻‍🎓 ↔ 🧑🏽‍🎓</div><h3 id="roomTitle">找到本人</h3><p id="roomText">面對面聊兩分鐘</p></article>
+        <div class="bottom"><button class="fab" id="fabTarget" aria-label="新增貼文">＋</button></div>
+        <div class="red-circle" id="redCircle" aria-hidden="true"></div>
+        <div class="phone-speech" id="phoneSpeech" role="status" aria-live="polite">💬 看到了！第1週「我的大學行李箱」。</div>
+      </div>
+      </div>
+
+      <article class="instruction" aria-live="polite">
+        <div class="instruction-scroll" id="instructionScroll">
+        <div class="eyebrow"><span class="number" id="num">1</span><span id="kicker">先進入正確的看板</span></div>
+        <h1 id="title">打開老師提供的連結</h1>
+        <p class="lead" id="lead">掃描課堂上的 QR Code，或點開老師放在網路大學、班級群組的固定連結。</p>
+        <div class="bubble" id="bubble">看到「創意媒體與生活｜第一階段」，就表示你進對地方了。</div>
+        <div class="example"><b id="exampleLabel">✎ 這一步的範例</b><p id="exampleText"></p></div>
+        <a class="board-link" href="https://padlet.com/t093000503/padlet-s023cz79cz5nqmz0ex6u" target="_blank" rel="noopener noreferrer">開啟 Padlet 看板 ↗</a>
+        <ul class="tips" id="tips"></ul>
+        <div class="warning" id="warning"></div>
+        <div class="checklist" id="checklist"></div>
+        <div class="done" id="done">✓ 完成！你已留下作品，也認識了一位同學。</div>
+        </div>
+        <div class="actions">
+          <button class="prev" id="prev">← 上一步</button>
+          <button class="next" id="next">下一步 →</button>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<script>
+  const steps=[
+    {
+      kicker:'先確認自己沒有走錯棚', title:'打開老師提供的連結',
+      lead:'掃描課堂上的 QR Code，或點開老師放在網路大學、班級群組的固定連結。',
+      bubble:'看到「創意媒體與生活｜第一階段」，恭喜你，沒有誤闖別班，也不是來到老師的私人收藏區。',
+      speech:'💬 看到了！第1週「我的大學行李箱」，先讀任務。',
+      exampleLabel:'✎ 等一下要完成的貼文',example:'標題：01｜王小明｜我的大學行李箱\n內容：我喜歡拍照、期待認識新朋友，也有點擔心上台報告。',
+      tips:['找到「第1週｜我的大學行李箱」區段。','先閱讀老師的任務說明與示範貼文。'],
+      warning:'先不要把作業塞在老師的任務說明下面，否則最後會變成30個人擠在同一個行李箱裡。', focus:'weekTitle'
+    },
+    {
+      kicker:'替自己蓋一間白色小屋', title:'按「＋」新增貼文',
+      lead:'手機版按下方綠色「＋」；電腦版按「我的大學行李箱」下方淡黃色長條「＋」。',
+      bubble:'每位同學都要有自己的一張白色貼文卡片。不要寄生在老師或同學家。',
+      speech:'💬 手機按下方綠色「＋」；電腦按欄位下方淡黃色長條「＋」。',
+      exampleLabel:'✎ 按下「＋」後要寫什麼？',example:'先開一篇自己的新貼文。標題寫「座號｜姓名｜我的大學行李箱」，例如：01｜王小明｜我的大學行李箱。',
+      tips:['手機：按下方綠色圓形「＋」。','電腦：按「我的大學行李箱」標題下方淡黃色長條「＋」。','不要按貼文底下的「新增留言」。'],
+      warning:'如果你開始在別人的貼文下面寫自己的三大願望，請立刻停手，你按錯地方了。', focus:'fabTarget'
+    },
+    {
+      kicker:'打開你的大學行李箱', title:'寫三件事，再加入一張圖片',
+      lead:'貼文內容包含：一項興趣或能力、一項期待，以及目前的一項小擔心。',
+      bubble:'貼文主題統一寫：「座號｜姓名｜我的大學行李箱」。不要只寫「嗨」、「不知道」或一個神祕的句點。',
+      speech:'💬 標題寫座號姓名；內文寫興趣、期待、小擔心。',
+      exampleLabel:'✎ 個人貼文完整範例',example:'標題：01｜王小明｜我的大學行李箱\n我喜歡拍照，尤其愛拍路上的貓。\n我期待大學能認識一起做作品的朋友。\n我有點擔心上台報告會緊張。\n圖片：放一張自己的相機或拍攝作品。',
+      post:'我喜歡拍照，尤其愛拍路上的貓。\n我期待認識一起做作品的朋友。\n我有點擔心上台報告會緊張。',showImage:true,
+      tips:['圖片可以是本人、物品、生活場景、興趣或收藏。','完成後按「發布」，回到看板確認貼文已出現。'],
+      warning:'不一定要上傳本人照片。你可以放畫具、球鞋、收藏或AI圖；但不要隨手拍天花板，除非天花板真的代表你。', focus:'postContent'
+    },
+    {
+      kicker:'開始同伴雷達', title:'瀏覽全班的行李箱',
+      lead:'往下滑動看同學的貼文，完成下面三個搜尋任務；每找到一項，就打勾。',
+      bubble:'雷達啟動！找一個「跟我一樣」、一個「也想做」、一個「咦，這真有趣」。',
+      speech:'💬 同伴雷達：找到三種貼文，找到一項就打勾！',
+      exampleLabel:'✎ 雷達找到的例子',example:'相同興趣：小安也喜歡拍照。\n相同期望：小美也期待認識新朋友。\n意外發現：阿哲帶了一把吉他，這篇真有趣！',
+      postTitle:'08｜陳小安｜我的大學行李箱',post:'我喜歡拍照，也想認識新朋友。我的行李箱裡會放一把吉他。',
+      tips:[],
+      warning:'這不是比誰滑得快。找到三個目標，才算雷達任務完成。', focus:'studentCard', checklist:'radar'
+    },
+    {
+      kicker:'不要只按愛心就逃跑', title:'留下一則有內容的留言',
+      lead:'選擇其中一位同學，在他的個人貼文下方按「新增留言」。',
+      bubble:'寫出共同點，再約對方當面聊聊。',
+      speech:'💬 點「新增留言」，告訴小安你們的共同點。',
+      exampleLabel:'✎ 可以直接參考這句',example:'「小安，我跟你一樣也喜歡拍照，下課可以認識一下。」\n也可以寫：「我跟你一樣也期待認識新朋友，下課可以認識一下。」',
+      postTitle:'08｜陳小安｜我的大學行李箱',post:'我喜歡拍照，也想認識新朋友。我的行李箱裡會放一把吉他。',
+      tips:['從剛才找到的同學中選一位。','留言完成後，記住這位同學的姓名。'],
+      warning:'留言要留在那位同學的個人貼文下方。如果全班都留言在「搜尋任務」下面，老師會看到一鍋留言大雜燴。', focus:'commentTarget'
+    },
+    {
+      kicker:'最後一關：真人解鎖', title:'找到真人，互相認識',
+      lead:'起身找到剛才留言的同學，面對面互相聊兩分鐘。',
+      bubble:'先說「嗨，我剛剛在你的貼文留言！」再問：你對大學最期待什麼？',
+      speech:'💬 離開螢幕，找到本人，互相聊兩分鐘！',
+      exampleLabel:'✎ 兩分鐘可以這樣聊',example:'「我也喜歡拍照！你最喜歡拍什麼？」\n「你對大學最期待的是什麼？」\n「原來你還會彈吉他！」',
+      roomTitle:'找到貼文裡的同學',roomText:'起身 → 找到本人 → 聊兩分鐘',
+      tips:['兩人輪流說，記住對方的名字、共同點和對大學的期待。'], warning:'', focus:'roomCard', room:true
+    },
+    {
+      kicker:'把新朋友介紹給全班', title:'介紹同學，不是介紹自己',
+      lead:'老師邀請三組同學分享。輪到你們時，介紹剛認識的對方。',
+      bubble:'換我當介紹人：說出對方的名字、我們的共同點，還有他對大學的期待。',
+      speech:'💬 介紹新朋友：他是誰？我們哪裡相同？他期待什麼？',
+      exampleLabel:'✎ 三句話範例',example:'「我認識的是陳小安。\n我們共同喜歡拍照。\n他對大學最期待的是認識一起做作品的朋友。」',
+      roomTitle:'向全班介紹對方',roomText:'我認識的是＿＿＿。\n我們共同喜歡＿＿＿。\n他對大學最期待的是＿＿＿。',
+      tips:['全班邀請三組分享，其他同學也要準備好，可能輪到你們。','介紹對方說過的事，不需要幫他編一個傳奇人生。'], warning:'', focus:'roomCard', room:true, checklist:'finish'
+    }
+  ];
+  let index=0;
+  const checkedItems=new Set();
+  const $=id=>document.getElementById(id);
+  const ids=['taskCard','studentCard','plusTarget','fabTarget','commentTarget'];
+  function moveCircle(){
+    const phone=$('phone'),target=$(steps[index].focus),ring=$('redCircle');
+    if(!phone||!target||!ring)return;
+    const p=phone.getBoundingClientRect(),t=target.getBoundingClientRect();
+    const pad=target.id==='fabTarget'?10:12;
+    const width=Math.min(t.width+pad*2,phone.clientWidth-20);
+    const height=t.height+pad*2;
+    ring.style.width=`${width}px`;ring.style.height=`${height}px`;
+    ring.style.left=`${t.left-p.left-phone.clientLeft+(t.width-width)/2}px`;
+    ring.style.top=`${t.top-p.top-phone.clientTop-pad}px`;
+  }
+  function render(){
+    const s=steps[index];
+    $('stepCount').textContent=`步驟 ${index+1}／${steps.length}`;
+    $('bar').style.width=`${(index+1)/steps.length*100}%`;
+    $('num').textContent=index+1;$('kicker').textContent=s.kicker;$('title').textContent=s.title;$('lead').textContent=s.lead;$('bubble').textContent=s.bubble;
+    $('phoneSpeech').textContent=s.speech;
+    $('phoneSpeech').classList.remove('pop');void $('phoneSpeech').offsetWidth;$('phoneSpeech').classList.add('pop');
+    $('exampleLabel').textContent=s.exampleLabel;$('exampleText').textContent=s.example;
+    $('postTitle').textContent=s.postTitle||'01｜王小明｜我的大學行李箱';
+    $('postContent').textContent=s.post||'我喜歡拍照，希望認識新朋友，也有點擔心上台報告。';
+    $('postContent').style.whiteSpace='pre-line';
+    $('sampleImage').style.display=s.showImage?'block':'none';
+    $('phone').classList.toggle('in-room',!!s.room);
+    $('weekTitle').textContent=s.room?'教室裡｜認識新朋友':'第1週｜我的大學行李箱';
+    $('roomTitle').textContent=s.roomTitle||'';
+    $('roomText').textContent=s.roomText||'';
+    $('roomText').style.whiteSpace='pre-line';
+    $('tips').innerHTML=s.tips.map(x=>`<li>${x}</li>`).join('');
+    $('warning').textContent=s.warning;$('warning').style.display=s.warning?'block':'none';
+    const items=s.checklist==='radar' ? [
+      ['radar-interest','找到一位與我有相同興趣的人'],
+      ['radar-hope','找到一位與我有相同期望的人'],
+      ['radar-surprise','找到一篇我沒想到、但覺得有趣的貼文']
+    ] : s.checklist==='finish' ? [
+      ['finish-post','已發布自己的「大學行李箱」貼文'],
+      ['finish-radar','已完成同伴雷達三個搜尋任務'],
+      ['finish-comment','已在一位同學的貼文下留言'],
+      ['finish-chat','已找到本人，互相聊兩分鐘'],
+      ['finish-share','已準備好介紹這位同學']
+    ] : [];
+    $('checklist').replaceChildren(...items.map(([key,label])=>{
+      const row=document.createElement('label'),box=document.createElement('input'),caption=document.createElement('span');
+      box.type='checkbox';box.checked=checkedItems.has(key);box.addEventListener('change',()=>{
+        if(box.checked)checkedItems.add(key);else checkedItems.delete(key);
+      });
+      caption.textContent=label;row.append(box,caption);return row;
+    }));
+    $('done').style.display='none';
+    ids.forEach(id=>$(id)?.classList.remove('focus'));$(s.focus)?.classList.add('focus');
+    requestAnimationFrame(moveCircle);
+    $('prev').disabled=index===0;$('prev').style.opacity=index===0?'.38':'1';
+    $('prev').textContent=index===0?'← 上一步':`← 第 ${index} 步`;
+    $('next').textContent=index===steps.length-1?'完成 ✓':`第 ${index+2} 步 →`;
+    [...$('dots').children].forEach((d,i)=>d.classList.toggle('on',i===index));
+    $('instructionScroll').scrollTop=0;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function go(n){index=Math.max(0,Math.min(steps.length-1,n));render()}
+  steps.forEach((_,i)=>{const b=document.createElement('button');b.className='dot';b.textContent=`第 ${i+1} 步`;b.setAttribute('aria-label',`前往第 ${i+1} 步`);b.onclick=()=>go(i);$('dots').appendChild(b)});
+  $('prev').onclick=()=>go(index-1);
+  $('next').onclick=()=>{
+    if(index===3 && [...document.querySelectorAll('.checklist input')].some(b=>!b.checked)){
+      $('done').style.display='block';$('done').textContent='先找到三個雷達目標，打勾後再進入下一步。';return;
+    }
+    if(index<steps.length-1){go(index+1);return}
+    const boxes=[...document.querySelectorAll('.checklist input')];
+    if(boxes.length&&boxes.some(b=>!b.checked)){ $('done').style.display='block';$('done').textContent='還有項目尚未勾選，完成後再確認一次。';return }
+    $('done').style.display='block';$('done').textContent='✓ 完成！你已留下作品，也認識了一位同學。';
+  };
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')$('next').click();if(e.key==='ArrowLeft')$('prev').click()});
+  window.addEventListener('resize',moveCircle);
+  render();
+</script>
+</body>
+</html>
